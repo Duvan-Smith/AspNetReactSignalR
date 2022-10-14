@@ -1,4 +1,18 @@
+string MiCors = "MiCords";
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options => options.AddPolicy(name: MiCors, builder =>
+{
+    builder
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials()
+        .WithOrigins(new[]
+        {
+            "http://localhost:3000",
+        })
+        .SetIsOriginAllowedToAllowWildcardSubdomains();
+}));
 
 // Add services to the container.
 
@@ -8,6 +22,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseCors(MiCors);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
